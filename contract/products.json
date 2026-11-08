@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "data": {
+    "items": [],
+    "meta": {
+      "page": 1,
+      "pageSize": 20,
+      "total": 0
+    }
+  },
+  "errors": []
+}
