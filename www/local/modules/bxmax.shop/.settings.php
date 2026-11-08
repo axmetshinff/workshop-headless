@@ -7,4 +7,12 @@ return [
         ],
         'readonly' => true,
     ],
+    'services' => [
+        'value' => [
+            \Bxmax\Shop\Internals\Contract\Repository\ProductRepositoryInterface::class => [
+                'className' => \Bxmax\Shop\Internals\Repository\IblockProductRepository::class,
+            ],
+        ],
+        'readonly' => true,
+    ],
 ];
