@@ -4,6 +4,8 @@
 !/README.md
 !/.github/
 !/contract/
+!/tests/
+!/phpunit.xml
 !/www/
 /www/*
 !/www/local/
