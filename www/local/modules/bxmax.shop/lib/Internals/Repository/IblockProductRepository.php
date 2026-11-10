@@ -47,6 +47,28 @@ final class IblockProductRepository implements ProductRepositoryInterface
         return $this->getElementDataClass()::getCount(['=ACTIVE' => 'Y']);
     }
 
+    public function findActiveById(int $id): ?array
+    {
+        $row = $this->getElementDataClass()::getList([
+            'select' => [
+                'ID',
+                'NAME',
+                'CODE',
+                'PRICE_AMOUNT' => 'BASE_PRICE.PRICE',
+                'PRICE_CURRENCY' => 'BASE_PRICE.CURRENCY',
+                'IBLOCK_SECTION_ID',
+                'ARTICLE' => 'ARTNUMBER.VALUE',
+                'DETAIL_TEXT',
+                'DETAIL_TEXT_TYPE',
+            ],
+            'filter' => ['=ID' => $id, '=ACTIVE' => 'Y'],
+            'limit' => 1,
+            'runtime' => [$this->getBasePriceReference()],
+        ])->fetch();
+
+        return $row === false ? null : ProductMapper::convertDetailFromRow($row);
+    }
+
     /**
      * ORM-класс элементов каталога. compileEntity() каждый раз ищет инфоблок в базе, поэтому класс запоминаем.
      *
