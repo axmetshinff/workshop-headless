@@ -8,17 +8,19 @@ API магазина на штатных механизмах ядра 1С-Би�
 Репозиторий — корень сайта Omut `~/Omut/shop.bitrix`. Git отслеживает только код проекта:
 
 - `www/local/` — модуль `www/local/modules/bxmax.shop`, маршруты `www/local/routes/api.php`, настройки `www/local/.settings_extra.php`;
-- `contract/` — эталонные ответы API;
+- `contract/` — эталонные ответы API и каталог кодов ошибок `errors.md`;
+- `tests/` и `phpunit.xml` — тесты на Pest;
 - `.github/` — шаблон PR для домашек;
 - `README.md`.
 
-Ядро (`www/bitrix/`), `www/upload/`, `vendor/` и `/bitrix/.settings.php` с паролем от базы в репозиторий не попадают.
+Ядро (`www/bitrix/`), `www/upload/`, `vendor/`, `composer.json` корня сайта и `/bitrix/.settings.php` с паролем от базы в репозиторий не попадают.
 
 ## Требования
 
 - Omut, сайт `shop.bitrix`, установка «Под ключ», редакция «Малый бизнес» или «Бизнес»;
 - main 25.900+ (проверено на 26.1000), PHP 8.2+;
-- `composer install` в корне сайта, чтобы работала консоль `php www/bitrix/bitrix.php`.
+- `composer install` в корне сайта, чтобы работала консоль `php www/bitrix/bitrix.php`;
+- с занятия 2: мастер «Интернет-магазин» с демо-данными и символьный код API `clothes` у инфоблока «Одежда».
 
 ## Теги
 
@@ -31,6 +33,12 @@ API магазина на штатных механизмах ядра 1С-Би�
 | `cp-04-layers` | `ProductListService` в `Public/Service`, интерфейс репозитория в `Internals/Contract`, заглушка, привязка в `services` |
 | `cp-05-products` | контроллер `Product`, `GET /api/v1/products` |
 | `session-01` | конец занятия 1: эталоны в `contract/`, договорённость с фронтом |
+| `cp-06-pest` | `phpunit.xml` и `tests/bootstrap.php`: Pest запускается без пролога и базы |
+| `cp-07-service-test` | тест `ProductListService` на `InMemoryProductRepository` |
+| `cp-08-catalog` | `IblockProductRepository` на ORM каталога мастера, цена BASE одним JOIN, `ProductMapper` |
+| `cp-09-mapper-test` | тест маппера |
+| `cp-10-detail` | `GET /api/v1/products/{id}`, `ProductViewService`, `PRODUCT_NOT_FOUND` → 404 |
+| `session-02` | конец занятия 2: эталоны каталога, `contract/errors.md` |
 
 Отстали — переключитесь на тег и продолжайте:
 
@@ -39,6 +47,23 @@ git switch --detach cp-03-health
 ```
 
 Переключение тега не меняет базу: модуль, установленный из админки, остаётся установленным.
+
+## Тесты
+
+Pest ставится в `composer.json` корня сайта. Этот файл не в git, поэтому на каждом стенде один раз:
+
+```bash
+composer config allow-plugins.pestphp/pest-plugin true
+composer require --dev pestphp/pest
+```
+
+Composer выберет версию под ваш PHP: Pest 3 на 8.2, Pest 4 на 8.3, Pest 5 на 8.4. Запуск — из корня сайта:
+
+```bash
+vendor/bin/pest
+```
+
+Юнит-тесты не подключают пролог и не ходят в базу: `tests/bootstrap.php` регистрирует автозагрузку ядра и модуля, репозиторий в тестах подменяется реализацией из `tests/Fake/`.
 
 ## Домашки
 
@@ -68,9 +93,11 @@ git switch --detach cp-03-health
 ```
 
 - Успех: `status: "success"`, данные в `data`, `errors` пустой.
-- Ошибка приложения: `status: "error"`, `data` может быть `null`. Решения принимаем по `errors[].code`: коды стабильны. `message` показываем покупателю только у ошибок, которые API отдаёт явно.
+- Ошибка приложения: `status: "error"`, `data` может быть `null`. Решения принимаем по `errors[].code`: коды стабильны, их список — в `contract/errors.md`. `message` показываем покупателю только у ошибок, которые API отдаёт явно.
 - На проде (`exception_handling.debug = false`) у непредвиденных ошибок `message` равен `Internal server error.`, начиная с main 26.1000.
-- HTTP-статус проверяем отдельно: `401` — нужен вход. Ответ `500` без конверта — сервер упал до контроллера, разбирать тело не нужно.
+- HTTP-статус проверяем отдельно: `401` — нужен вход, `404` в конверте — ресурса нет, какого — скажет код ошибки. `404` без конверта — такого адреса в API нет. Ответ `500` без конверта — сервер упал до контроллера, разбирать тело не нужно.
+- Список товаров отдаёт `id`, `name`, `code`, `price`. Карточка `GET /api/v1/products/{id}` — те же поля плюс `categoryId`, `article`, `descriptionHtml`. Описание всегда HTML: текстовое описание из админки приходит экранированным.
+- Неактивный товар неотличим от несуществующего: в списке его нет, карточка отвечает `PRODUCT_NOT_FOUND`.
 - Суммы — строкой с двумя знаками после точки и валютой: `{"amount": "1990.00", "currency": "RUB"}`.
 
 Эталонные ответы — в `contract/`. Формат меняется только вместе с ними и с версией в адресе.
