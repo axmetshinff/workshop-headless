@@ -41,15 +41,36 @@ final class SaleBasketRepository implements BasketRepositoryInterface
             ));
         }
 
-        $saveResult = $basket->save();
-        if (!$saveResult->isSuccess()) {
-            return (new Result())->addError(new Error(
-                'Не удалось сохранить корзину',
-                ErrorCode::BasketSaveFailed->value,
-            ));
+        return $this->save($basket);
+    }
+
+    public function update(int $itemId, int $quantity): Result
+    {
+        $basket = $this->loadCurrent();
+        $item = $basket->getItemById($itemId);
+        if ($item === null) {
+            return $this->itemNotFound();
         }
 
-        return (new Result())->setData(BasketMapper::convert($basket));
+        $setResult = $item->setField('QUANTITY', $quantity);
+        if (!$setResult->isSuccess()) {
+            return $this->saveFailed();
+        }
+
+        return $this->save($basket);
+    }
+
+    public function delete(int $itemId): Result
+    {
+        $basket = $this->loadCurrent();
+        $item = $basket->getItemById($itemId);
+        if ($item === null) {
+            return $this->itemNotFound();
+        }
+
+        $item->delete();
+
+        return $this->save($basket);
     }
 
     private function loadCurrent(): Basket
@@ -71,5 +92,31 @@ final class SaleBasketRepository implements BasketRepositoryInterface
         }
 
         return $siteId;
+    }
+
+    private function save(Basket $basket): Result
+    {
+        $saveResult = $basket->save();
+        if (!$saveResult->isSuccess()) {
+            return $this->saveFailed();
+        }
+
+        return (new Result())->setData(BasketMapper::convert($basket));
+    }
+
+    private function itemNotFound(): Result
+    {
+        return (new Result())->addError(new Error(
+            'Позиция корзины не найдена',
+            ErrorCode::BasketItemNotFound->value,
+        ));
+    }
+
+    private function saveFailed(): Result
+    {
+        return (new Result())->addError(new Error(
+            'Не удалось сохранить корзину',
+            ErrorCode::BasketSaveFailed->value,
+        ));
     }
 }

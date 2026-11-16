@@ -22,4 +22,8 @@ interface BasketRepositoryInterface
     public function getCurrent(): array;
 
     public function add(int $productId, int $quantity): Result;
+
+    public function update(int $itemId, int $quantity): Result;
+
+    public function delete(int $itemId): Result;
 }

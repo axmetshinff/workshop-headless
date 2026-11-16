@@ -10,6 +10,7 @@ enum ErrorCode: string
 {
     case ProductNotFound = 'PRODUCT_NOT_FOUND';
     case ProductNotAvailable = 'PRODUCT_NOT_AVAILABLE';
+    case BasketItemNotFound = 'BASKET_ITEM_NOT_FOUND';
     case BasketSaveFailed = 'BASKET_SAVE_FAILED';
 
     /**
@@ -20,6 +21,7 @@ enum ErrorCode: string
         return match ($this) {
             self::ProductNotFound => 404,
             self::ProductNotAvailable => 422,
+            self::BasketItemNotFound => 404,
             self::BasketSaveFailed => 500,
         };
     }

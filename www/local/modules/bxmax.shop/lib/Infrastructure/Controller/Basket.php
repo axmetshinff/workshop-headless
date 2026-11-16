@@ -6,6 +6,7 @@ use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\JsonPayload;
 use Bitrix\Main\Validation\Engine\AutoWire\ValidationParameter;
 use Bxmax\Shop\Infrastructure\Controller\Request\BasketItemAddRequest;
+use Bxmax\Shop\Infrastructure\Controller\Request\BasketItemUpdateRequest;
 use Bxmax\Shop\Public\Service\BasketService;
 
 final class Basket extends ApiController
@@ -16,6 +17,10 @@ final class Basket extends ApiController
             new ValidationParameter(
                 BasketItemAddRequest::class,
                 fn () => BasketItemAddRequest::fromPayload((new JsonPayload())->getData()),
+            ),
+            new ValidationParameter(
+                BasketItemUpdateRequest::class,
+                fn () => BasketItemUpdateRequest::fromPayload((new JsonPayload())->getData()),
             ),
         ];
     }
@@ -35,6 +40,19 @@ final class Basket extends ApiController
                     new ActionFilter\Csrf(),
                 ],
             ],
+            'update' => [
+                'prefilters' => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_PATCH]),
+                    new ActionFilter\ContentType([ActionFilter\ContentType::JSON]),
+                    new ActionFilter\Csrf(),
+                ],
+            ],
+            'delete' => [
+                'prefilters' => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_DELETE]),
+                    new ActionFilter\Csrf(),
+                ],
+            ],
         ];
     }
 
@@ -49,5 +67,18 @@ final class Basket extends ApiController
     public function addAction(BasketItemAddRequest $request, BasketService $basketService): ?array
     {
         return $this->respond($basketService->add($request->productId, $request->quantity));
+    }
+
+    public function updateAction(
+        int $id,
+        BasketItemUpdateRequest $request,
+        BasketService $basketService,
+    ): ?array {
+        return $this->respond($basketService->update($id, $request->quantity));
+    }
+
+    public function deleteAction(int $id, BasketService $basketService): ?array
+    {
+        return $this->respond($basketService->delete($id));
     }
 }

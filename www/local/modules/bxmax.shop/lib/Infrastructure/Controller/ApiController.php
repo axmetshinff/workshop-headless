@@ -3,8 +3,11 @@
 namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Context;
+use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\AutoWire\BinderArgumentException;
 use Bitrix\Main\Engine\Controller;
+use Bitrix\Main\HttpResponse;
+use Bitrix\Main\Response;
 use Bitrix\Main\Result;
 use Bxmax\Shop\Public\Enum\ErrorCode;
 
@@ -17,6 +20,25 @@ abstract class ApiController extends Controller
     {
         parent::runProcessingBinderThrowable($e);
         Context::getCurrent()->getResponse()->setStatus(400);
+    }
+
+    public function finalizeResponse(Response $response): void
+    {
+        if (!$response instanceof HttpResponse) {
+            return;
+        }
+
+        $status = match (true) {
+            $this->getErrorByCode(ActionFilter\Authentication::ERROR_INVALID_AUTHENTICATION) !== null => 401,
+            $this->getErrorByCode(ActionFilter\Csrf::ERROR_INVALID_CSRF) !== null => 403,
+            $this->getErrorByCode(ActionFilter\HttpMethod::ERROR_INVALID_HTTP_METHOD) !== null => 405,
+            $this->getErrorByCode(ActionFilter\ContentType::ERROR_INVALID_CONTENT_TYPE) !== null => 415,
+            default => null,
+        };
+
+        if ($status !== null) {
+            $response->setStatus($status);
+        }
     }
 
     protected function getDefaultPreFilters(): array
