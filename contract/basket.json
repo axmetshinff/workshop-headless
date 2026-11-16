@@ -1,0 +1,26 @@
+{
+  "status": "success",
+  "data": {
+    "items": [
+      {
+        "id": 13,
+        "productId": 75,
+        "name": "Штаны Цветочная Поляна",
+        "quantity": 2,
+        "price": {
+          "amount": "2199.00",
+          "currency": "RUB"
+        },
+        "total": {
+          "amount": "4398.00",
+          "currency": "RUB"
+        }
+      }
+    ],
+    "total": {
+      "amount": "4398.00",
+      "currency": "RUB"
+    }
+  },
+  "errors": []
+}

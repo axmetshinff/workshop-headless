@@ -1,0 +1,11 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "Товар нельзя добавить в корзину",
+      "code": "PRODUCT_NOT_AVAILABLE",
+      "customData": null
+    }
+  ]
+}

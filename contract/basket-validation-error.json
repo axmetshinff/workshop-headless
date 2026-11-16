@@ -1,0 +1,16 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "productId: положительное целое число",
+      "code": "productId",
+      "customData": null
+    },
+    {
+      "message": "quantity: целое число от 1 до 100",
+      "code": "quantity",
+      "customData": null
+    }
+  ]
+}
