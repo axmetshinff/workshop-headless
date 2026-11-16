@@ -2,6 +2,7 @@
 
 use Bitrix\Main\Engine\Response\Json;
 use Bitrix\Main\Routing\RoutingConfigurator;
+use Bxmax\Shop\Infrastructure\Controller\Basket as BasketController;
 use Bxmax\Shop\Infrastructure\Controller\Health;
 use Bxmax\Shop\Infrastructure\Controller\Product;
 
@@ -10,6 +11,7 @@ return static function (RoutingConfigurator $routes): void {
         $routes->get('health', [Health::class, 'check']);
         $routes->get('products', [Product::class, 'list']);
         $routes->get('products/{id}', [Product::class, 'get'])->where('id', '[0-9]+');
+        $routes->get('basket', [BasketController::class, 'get']);
 
         $routes->any('{any}', static function (): Json {
             $response = new Json([

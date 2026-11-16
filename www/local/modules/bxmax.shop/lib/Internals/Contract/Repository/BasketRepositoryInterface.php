@@ -1,0 +1,21 @@
+<?php declare(strict_types=1);
+
+namespace Bxmax\Shop\Internals\Contract\Repository;
+
+interface BasketRepositoryInterface
+{
+    /**
+     * @return array{
+     *     items: list<array{
+     *         id: int,
+     *         productId: int,
+     *         name: string,
+     *         quantity: float,
+     *         price: array{amount: string, currency: string},
+     *         total: array{amount: string, currency: string},
+     *     }>,
+     *     total: array{amount: string, currency: string},
+     * }
+     */
+    public function getCurrent(): array;
+}

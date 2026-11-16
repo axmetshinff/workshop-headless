@@ -3,4 +3,6 @@
 use Bitrix\Main\Loader;
 
 Loader::includeModule('iblock');
+Loader::includeModule('currency');
 Loader::includeModule('catalog');
+Loader::includeModule('sale');
