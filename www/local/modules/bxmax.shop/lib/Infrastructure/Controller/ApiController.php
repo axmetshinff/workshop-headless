@@ -3,6 +3,7 @@
 namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Context;
+use Bitrix\Main\Engine\AutoWire\BinderArgumentException;
 use Bitrix\Main\Engine\Controller;
 use Bitrix\Main\Result;
 use Bxmax\Shop\Public\Enum\ErrorCode;
@@ -12,6 +13,12 @@ use Bxmax\Shop\Public\Enum\ErrorCode;
  */
 abstract class ApiController extends Controller
 {
+    protected function runProcessingBinderThrowable(BinderArgumentException $e): void
+    {
+        parent::runProcessingBinderThrowable($e);
+        Context::getCurrent()->getResponse()->setStatus(400);
+    }
+
     protected function getDefaultPreFilters(): array
     {
         return [];

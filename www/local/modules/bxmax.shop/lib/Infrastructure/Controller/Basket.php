@@ -4,10 +4,22 @@ namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\JsonPayload;
+use Bitrix\Main\Validation\Engine\AutoWire\ValidationParameter;
+use Bxmax\Shop\Infrastructure\Controller\Request\BasketItemAddRequest;
 use Bxmax\Shop\Public\Service\BasketService;
 
 final class Basket extends ApiController
 {
+    public function getAutoWiredParameters(): array
+    {
+        return [
+            new ValidationParameter(
+                BasketItemAddRequest::class,
+                fn () => BasketItemAddRequest::fromPayload((new JsonPayload())->getData()),
+            ),
+        ];
+    }
+
     public function configureActions(): array
     {
         return [
@@ -34,14 +46,8 @@ final class Basket extends ApiController
         return $basket;
     }
 
-    public function addAction(JsonPayload $json, BasketService $basketService): ?array
+    public function addAction(BasketItemAddRequest $request, BasketService $basketService): ?array
     {
-        $payload = $json->getData();
-        $result = $basketService->add(
-            (int)($payload['productId'] ?? 0),
-            (int)($payload['quantity'] ?? 0),
-        );
-
-        return $this->respond($result);
+        return $this->respond($basketService->add($request->productId, $request->quantity));
     }
 }
