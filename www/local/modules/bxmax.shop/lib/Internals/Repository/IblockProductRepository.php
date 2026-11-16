@@ -4,9 +4,7 @@ namespace Bxmax\Shop\Internals\Repository;
 
 use Bitrix\Catalog\GroupTable;
 use Bitrix\Catalog\PriceTable;
-use Bitrix\Iblock\IblockTable;
-use Bitrix\Main\Loader;
-use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Iblock\Elements\ElementClothesTable;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
 use Bxmax\Shop\Internals\Contract\Repository\ProductRepositoryInterface;
@@ -17,14 +15,9 @@ use Bxmax\Shop\Internals\Repository\Mapper\ProductMapper;
  */
 final class IblockProductRepository implements ProductRepositoryInterface
 {
-    private const IBLOCK_API_CODE = 'clothes';
-
-    /** @var class-string<DataManager>|null */
-    private ?string $elementDataClass = null;
-
     public function findActive(int $limit, int $offset): array
     {
-        $rows = $this->getElementDataClass()::getList([
+        $rows = ElementClothesTable::getList([
             'select' => [
                 'ID',
                 'NAME',
@@ -44,12 +37,12 @@ final class IblockProductRepository implements ProductRepositoryInterface
 
     public function countActive(): int
     {
-        return $this->getElementDataClass()::getCount(['=ACTIVE' => 'Y']);
+        return ElementClothesTable::getCount(['=ACTIVE' => 'Y']);
     }
 
     public function findActiveById(int $id): ?array
     {
-        $row = $this->getElementDataClass()::getList([
+        $row = ElementClothesTable::getList([
             'select' => [
                 'ID',
                 'NAME',
@@ -67,30 +60,6 @@ final class IblockProductRepository implements ProductRepositoryInterface
         ])->fetch();
 
         return $row === false ? null : ProductMapper::convertDetailFromRow($row);
-    }
-
-    /**
-     * ORM-класс элементов каталога. compileEntity() каждый раз ищет инфоблок в базе, поэтому класс запоминаем.
-     *
-     * @return class-string<DataManager>
-     */
-    private function getElementDataClass(): string
-    {
-        if ($this->elementDataClass !== null) {
-            return $this->elementDataClass;
-        }
-
-        Loader::requireModule('iblock');
-        Loader::requireModule('catalog');
-
-        $entity = IblockTable::compileEntity(self::IBLOCK_API_CODE);
-        if ($entity === false) {
-            throw new \RuntimeException(
-                'Catalog iblock with API_CODE "' . self::IBLOCK_API_CODE . '" not found. Set it in the iblock settings.'
-            );
-        }
-
-        return $this->elementDataClass = $entity->getDataClass();
     }
 
     /**

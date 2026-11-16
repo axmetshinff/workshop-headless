@@ -1,0 +1,6 @@
+<?php declare(strict_types=1);
+
+use Bitrix\Main\Loader;
+
+Loader::includeModule('iblock');
+Loader::includeModule('catalog');
