@@ -12,6 +12,7 @@ return static function (RoutingConfigurator $routes): void {
         $routes->get('products', [Product::class, 'list']);
         $routes->get('products/{id}', [Product::class, 'get'])->where('id', '[0-9]+');
         $routes->get('basket', [BasketController::class, 'get']);
+        $routes->post('basket/items', [BasketController::class, 'add']);
 
         $routes->any('{any}', static function (): Json {
             $response = new Json([

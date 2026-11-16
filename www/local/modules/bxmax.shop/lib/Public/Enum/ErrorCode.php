@@ -9,6 +9,8 @@ namespace Bxmax\Shop\Public\Enum;
 enum ErrorCode: string
 {
     case ProductNotFound = 'PRODUCT_NOT_FOUND';
+    case ProductNotAvailable = 'PRODUCT_NOT_AVAILABLE';
+    case BasketSaveFailed = 'BASKET_SAVE_FAILED';
 
     /**
      * HTTP-статус ответа с этой ошибкой. Сервисы его не читают, статус ставит контроллер.
@@ -17,6 +19,8 @@ enum ErrorCode: string
     {
         return match ($this) {
             self::ProductNotFound => 404,
+            self::ProductNotAvailable => 422,
+            self::BasketSaveFailed => 500,
         };
     }
 }

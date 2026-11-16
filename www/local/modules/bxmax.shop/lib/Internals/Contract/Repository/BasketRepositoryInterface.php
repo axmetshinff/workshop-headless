@@ -2,6 +2,8 @@
 
 namespace Bxmax\Shop\Internals\Contract\Repository;
 
+use Bitrix\Main\Result;
+
 interface BasketRepositoryInterface
 {
     /**
@@ -18,4 +20,6 @@ interface BasketRepositoryInterface
      * }
      */
     public function getCurrent(): array;
+
+    public function add(int $productId, int $quantity): Result;
 }

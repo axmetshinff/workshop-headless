@@ -3,6 +3,7 @@
 namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
+use Bitrix\Main\Engine\JsonPayload;
 use Bxmax\Shop\Public\Service\BasketService;
 
 final class Basket extends ApiController
@@ -15,6 +16,13 @@ final class Basket extends ApiController
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET]),
                 ],
             ],
+            'add' => [
+                'prefilters' => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_POST]),
+                    new ActionFilter\ContentType([ActionFilter\ContentType::JSON]),
+                    new ActionFilter\Csrf(),
+                ],
+            ],
         ];
     }
 
@@ -24,5 +32,16 @@ final class Basket extends ApiController
         $basket['csrfToken'] = bitrix_sessid();
 
         return $basket;
+    }
+
+    public function addAction(JsonPayload $json, BasketService $basketService): ?array
+    {
+        $payload = $json->getData();
+        $result = $basketService->add(
+            (int)($payload['productId'] ?? 0),
+            (int)($payload['quantity'] ?? 0),
+        );
+
+        return $this->respond($result);
     }
 }
