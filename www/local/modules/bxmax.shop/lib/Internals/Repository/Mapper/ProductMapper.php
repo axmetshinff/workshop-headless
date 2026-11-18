@@ -21,6 +21,20 @@ final class ProductMapper
         ];
     }
 
+    /** Разные записи b_file могут указывать на один и тот же URL. */
+    public static function imageUrls(array $fileIds, array $urlsById): array
+    {
+        $images = [];
+        foreach ($fileIds as $id) {
+            if (isset($urlsById[$id])) {
+                $url = $urlsById[$id];
+                $images[$url] = $url;
+            }
+        }
+
+        return array_values($images);
+    }
+
     public static function convertOfferFromRow(array $row): array
     {
         $price = self::convertPrice($row['PRICE_AMOUNT'], $row['PRICE_CURRENCY']);

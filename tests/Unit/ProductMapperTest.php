@@ -106,3 +106,15 @@ test('предложение доступно при наличии базово
         ->and($offer['size'])->toBeNull()
         ->and($offer['color'])->toBeNull();
 })->with([['Y', null, false], ['N', '199', false], ['Y', '0', true]]);
+
+test('разные ID одного фото дают один URL на месте первого вхождения', function () {
+    $urls = [
+        18 => 'https://shop.example/upload/blue.jpg',
+        32 => 'https://shop.example/upload/check.jpg',
+        94 => 'https://shop.example/upload/blue.jpg',
+        76 => 'https://shop.example/upload/stripe.jpg',
+    ];
+
+    expect(ProductMapper::imageUrls([32, 18, 94, 99, 76, 32], $urls))
+        ->toBe([$urls[32], $urls[18], $urls[76]]);
+});

@@ -6,6 +6,7 @@ use Bitrix\Iblock\Elements\ElementClothesTable;
 use Bitrix\Main\Context;
 use Bitrix\Main\FileTable;
 use Bitrix\Main\Web\Uri;
+use Bxmax\Shop\Internals\Repository\Mapper\ProductMapper;
 
 final class ProductImageRepository
 {
@@ -60,11 +61,7 @@ final class ProductImageRepository
 
         $images = [];
         foreach ($byProduct as $parentId => $ids) {
-            foreach ($ids as $id) {
-                if (isset($urls[$id])) {
-                    $images[$parentId][] = $urls[$id];
-                }
-            }
+            $images[$parentId] = ProductMapper::imageUrls($ids, $urls);
         }
         return $images;
     }
