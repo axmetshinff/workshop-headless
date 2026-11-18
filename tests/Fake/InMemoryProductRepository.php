@@ -26,7 +26,7 @@ final class InMemoryProductRepository implements ProductRepositoryInterface
         return count($this->products);
     }
 
-    public function findActiveById(int $id): ?array
+    public function findActiveById(int $id, array $include = []): ?array
     {
         foreach ($this->products as $product) {
             if ($product['id'] === $id) {

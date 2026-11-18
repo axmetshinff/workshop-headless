@@ -16,9 +16,9 @@ final class ProductViewService
     /**
      * Карточка активного товара. Неактивный товар неотличим от несуществующего.
      */
-    public function getById(int $id): Result
+    public function getById(int $id, array $include = []): Result
     {
-        $product = $this->productRepository->findActiveById($id);
+        $product = $this->productRepository->findActiveById($id, $include);
         if ($product === null) {
             return (new Result())->addError(new Error('Товар не найден', ErrorCode::ProductNotFound->value));
         }

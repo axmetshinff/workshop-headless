@@ -8,6 +8,7 @@ namespace Bxmax\Shop\Public\Enum;
  */
 enum ErrorCode: string
 {
+    case InvalidInclude = 'INVALID_INCLUDE';
     case ProductNotFound = 'PRODUCT_NOT_FOUND';
     case ProductNotAvailable = 'PRODUCT_NOT_AVAILABLE';
     case BasketItemNotFound = 'BASKET_ITEM_NOT_FOUND';
@@ -19,6 +20,7 @@ enum ErrorCode: string
     public function httpStatus(): int
     {
         return match ($this) {
+            self::InvalidInclude => 400,
             self::ProductNotFound => 404,
             self::ProductNotAvailable => 422,
             self::BasketItemNotFound => 404,

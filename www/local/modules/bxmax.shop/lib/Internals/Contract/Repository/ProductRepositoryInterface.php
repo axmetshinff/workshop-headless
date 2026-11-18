@@ -29,5 +29,5 @@ interface ProductRepositoryInterface
      *     descriptionHtml: string,
      * }
      */
-    public function findActiveById(int $id): ?array;
+    public function findActiveById(int $id, array $include = []): ?array;
 }

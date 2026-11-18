@@ -85,3 +85,13 @@ test('текстовое описание приходит экранирова�
         ->and($detail['categoryId'])->toBeNull()
         ->and($detail['article'])->toBeNull();
 });
+
+test('предложение содержит ID для корзины и подписи свойств', function () {
+    expect(ProductMapper::convertOfferFromRow([
+        'ID' => '225', 'NAME' => 'Туфли', 'CLOTHES_SIZE' => null, 'SHOE_SIZE' => '38',
+        'COLOR_NAME' => 'Синий', 'PRICE_AMOUNT' => '1299', 'PRICE_CURRENCY' => 'RUB', 'IS_AVAILABLE' => 'Y',
+    ]))->toBe([
+        'id' => 225, 'name' => 'Туфли', 'size' => '38', 'color' => 'Синий',
+        'price' => ['amount' => '1299.00', 'currency' => 'RUB'], 'available' => true,
+    ]);
+});

@@ -15,6 +15,8 @@ use Bxmax\Shop\Internals\Repository\Mapper\ProductMapper;
  */
 final class IblockProductRepository implements ProductRepositoryInterface
 {
+    public function __construct(private readonly OfferRepository $offers = new OfferRepository()) {}
+
     public function findActive(int $limit, int $offset): array
     {
         $rows = ElementClothesTable::getList([
@@ -40,7 +42,7 @@ final class IblockProductRepository implements ProductRepositoryInterface
         return ElementClothesTable::getCount(['=ACTIVE' => 'Y']);
     }
 
-    public function findActiveById(int $id): ?array
+    public function findActiveById(int $id, array $include = []): ?array
     {
         $row = ElementClothesTable::getList([
             'select' => [
@@ -59,9 +61,17 @@ final class IblockProductRepository implements ProductRepositoryInterface
             'runtime' => [$this->getBasePriceReference()],
         ])->fetch();
 
-        return $row === false ? null : ProductMapper::convertDetailFromRow($row);
-    }
+        if ($row === false) {
+            return null;
+        }
 
+        $product = ProductMapper::convertDetailFromRow($row);
+        if (in_array('offers', $include, true)) {
+            $product['offers'] = $this->offers->findByProductIds([$id])[$id] ?? [];
+        }
+
+        return $product;
+    }
     /**
      * Цена базового типа одним JOIN: товар без цены приходит с PRICE_AMOUNT = null.
      */

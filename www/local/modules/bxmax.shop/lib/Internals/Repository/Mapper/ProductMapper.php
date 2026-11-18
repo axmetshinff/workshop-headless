@@ -22,6 +22,18 @@ final class ProductMapper
         ];
     }
 
+    public static function convertOfferFromRow(array $row): array
+    {
+        return [
+            'id' => (int)$row['ID'],
+            'name' => (string)$row['NAME'],
+            'size' => $row['CLOTHES_SIZE'] ?? $row['SHOE_SIZE'],
+            'color' => $row['COLOR_NAME'],
+            'price' => self::convertPrice($row['PRICE_AMOUNT'], $row['PRICE_CURRENCY']),
+            'available' => $row['IS_AVAILABLE'] === 'Y',
+        ];
+    }
+
     /**
      * Карточка товара — те же поля, что в списке, плюс подробности.
      *

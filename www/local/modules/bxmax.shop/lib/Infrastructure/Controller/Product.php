@@ -3,6 +3,7 @@
 namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
+use Bxmax\Shop\Public\Query\IncludeQuery;
 use Bxmax\Shop\Public\Service\ProductListService;
 use Bxmax\Shop\Public\Service\ProductViewService;
 
@@ -23,7 +24,12 @@ final class Product extends ApiController
 
     public function getAction(ProductViewService $productViewService, int $id): ?array
     {
-        return $this->respond($productViewService->getById($id));
+        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers']);
+        if (!$include->isSuccess()) {
+            return $this->respond($include);
+        }
+
+        return $this->respond($productViewService->getById($id, $include->getData()));
     }
 
     /**
