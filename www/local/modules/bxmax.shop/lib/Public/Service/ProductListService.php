@@ -13,14 +13,14 @@ final class ProductListService
         private readonly ProductRepositoryInterface $productRepository,
     ) {}
 
-    public function getPage(int $page, int $pageSize): Result
+    public function getPage(int $page, int $pageSize, array $include = []): Result
     {
         $page = max(1, $page);
         $pageSize = min(self::MAX_PAGE_SIZE, max(1, $pageSize));
         $offset = ($page - 1) * $pageSize;
 
         return (new Result())->setData([
-            'items' => $this->productRepository->findActive($pageSize, $offset),
+            'items' => $this->productRepository->findActive($pageSize, $offset, $include),
             'meta' => [
                 'page' => $page,
                 'pageSize' => $pageSize,

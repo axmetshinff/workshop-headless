@@ -14,11 +14,13 @@ final class InMemoryProductRepository implements ProductRepositoryInterface
      */
     public function __construct(
         private readonly array $products,
+        private readonly array $relations = [],
     ) {}
 
-    public function findActive(int $limit, int $offset): array
+    public function findActive(int $limit, int $offset, array $include = []): array
     {
-        return array_slice($this->products, $offset, $limit);
+        return array_map(fn (array $product) => $this->withRelations($product, $include),
+            array_slice($this->products, $offset, $limit));
     }
 
     public function countActive(): int
@@ -30,10 +32,18 @@ final class InMemoryProductRepository implements ProductRepositoryInterface
     {
         foreach ($this->products as $product) {
             if ($product['id'] === $id) {
-                return $product + ['categoryId' => null, 'article' => null, 'descriptionHtml' => ''];
+                return $this->withRelations($product, $include) + ['categoryId' => null, 'article' => null, 'descriptionHtml' => ''];
             }
         }
 
         return null;
+    }
+    private function withRelations(array $product, array $include): array
+    {
+        foreach ($include as $name) {
+            $product[$name] = $this->relations[$product['id']][$name] ?? [];
+        }
+
+        return $product;
     }
 }

@@ -28,3 +28,11 @@ test('страница 0 и ниже становится первой', functio
     expect($data['meta']['page'])->toBe(1)
         ->and($data['items'])->toHaveCount(3);
 })->with([0, -5]);
+
+test('список добавляет только запрошенные связи и сохраняет пустые коллекции', function () {
+    $offer = ['id' => 75, 'name' => 'Брюки', 'size' => 'L', 'color' => null, 'price' => null, 'available' => false];
+    $repo = new InMemoryProductRepository([product(9), product(38)], [9 => ['offers' => [$offer]]]);
+    $service = new ProductListService($repo);
+    expect($service->getPage(1, 2)->getData()['items'][0])->not->toHaveKey('offers')
+        ->and(array_column($service->getPage(1, 2, ['offers'])->getData()['items'], 'offers'))->toBe([[$offer], []]);
+});

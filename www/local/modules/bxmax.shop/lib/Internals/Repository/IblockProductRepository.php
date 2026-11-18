@@ -17,7 +17,7 @@ final class IblockProductRepository implements ProductRepositoryInterface
 {
     public function __construct(private readonly OfferRepository $offers = new OfferRepository()) {}
 
-    public function findActive(int $limit, int $offset): array
+    public function findActive(int $limit, int $offset, array $include = []): array
     {
         $rows = ElementClothesTable::getList([
             'select' => [
@@ -34,7 +34,7 @@ final class IblockProductRepository implements ProductRepositoryInterface
             'runtime' => [$this->getBasePriceReference()],
         ])->fetchAll();
 
-        return array_map(ProductMapper::convertFromRow(...), $rows);
+        return $this->withRelations(array_map(ProductMapper::convertFromRow(...), $rows), $include);
     }
 
     public function countActive(): int
@@ -65,13 +65,21 @@ final class IblockProductRepository implements ProductRepositoryInterface
             return null;
         }
 
-        $product = ProductMapper::convertDetailFromRow($row);
+        return $this->withRelations([ProductMapper::convertDetailFromRow($row)], $include)[0];
+    }
+
+    private function withRelations(array $products, array $include): array
+    {
         if (in_array('offers', $include, true)) {
-            $product['offers'] = $this->offers->findByProductIds([$id])[$id] ?? [];
+            $offers = $this->offers->findByProductIds(array_column($products, 'id'));
+            foreach ($products as $index => $product) {
+                $products[$index]['offers'] = $offers[$product['id']] ?? [];
+            }
         }
 
-        return $product;
+        return $products;
     }
+
     /**
      * Цена базового типа одним JOIN: товар без цены приходит с PRICE_AMOUNT = null.
      */
