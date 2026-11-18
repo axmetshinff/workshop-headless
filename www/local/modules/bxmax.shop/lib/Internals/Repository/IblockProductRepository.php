@@ -11,7 +11,7 @@ use Bxmax\Shop\Internals\Contract\Repository\ProductRepositoryInterface;
 use Bxmax\Shop\Internals\Repository\Mapper\ProductMapper;
 
 /**
- * Товары из каталога «Одежда» мастера магазина. Единственный класс модуля, который знает про инфоблок.
+ * Товары из каталога «Одежда» мастера магазина. Связи загружаем для уже выбранной страницы.
  */
 final class IblockProductRepository implements ProductRepositoryInterface
 {

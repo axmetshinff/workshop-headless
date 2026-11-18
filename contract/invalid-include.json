@@ -1,0 +1,11 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "Недопустимое значение include",
+      "code": "INVALID_INCLUDE",
+      "customData": null
+    }
+  ]
+}

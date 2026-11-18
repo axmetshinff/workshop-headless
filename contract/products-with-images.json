@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "data": {
+    "items": [
+      {
+        "id": 44,
+        "name": "Ремень Грубая Кожа",
+        "code": "strap-rough-skin",
+        "price": {
+          "amount": "715.00",
+          "currency": "RUB"
+        },
+        "images": [
+          "http://shop.bitrix:8765/upload/iblock/a7c/fjeoylnxf3pr1or4v1ed2kobvo4tcdyo.jpg",
+          "http://shop.bitrix:8765/upload/iblock/d91/5ys8483wtf6wqvhedjg6cxtr9s6d1sbe.jpg",
+          "http://shop.bitrix:8765/upload/iblock/dc2/rmrw23rnukkg4ih3be7osfikf25r8oz9.jpg",
+          "http://shop.bitrix:8765/upload/iblock/a7c/fjeoylnxf3pr1or4v1ed2kobvo4tcdyo.jpg",
+          "http://shop.bitrix:8765/upload/iblock/7ed/apx5gg7jpfhjdlul32i3z2xct8vmt5fb.jpg",
+          "http://shop.bitrix:8765/upload/iblock/4f7/2ggi6g89tgk09aqfpshm0f8nnoas5tus.jpg"
+        ]
+      },
+      {
+        "id": 43,
+        "name": "Ремень Плетение",
+        "code": "strap-weaving",
+        "price": {
+          "amount": "750.00",
+          "currency": "RUB"
+        },
+        "images": [
+          "http://shop.bitrix:8765/upload/iblock/a77/y79aqxpdbsw3ygnoqd20rm32asxbblzp.jpg",
+          "http://shop.bitrix:8765/upload/iblock/e2b/l27xmngur27iz1sc3j12si5fkbtd8ewo.jpg",
+          "http://shop.bitrix:8765/upload/iblock/a17/hpw32qf3ja07zi14pvb0dt1lc195nd52.jpg",
+          "http://shop.bitrix:8765/upload/iblock/a77/y79aqxpdbsw3ygnoqd20rm32asxbblzp.jpg",
+          "http://shop.bitrix:8765/upload/iblock/425/3vf318asefghql35ye1161h9c8jp0mxf.jpg",
+          "http://shop.bitrix:8765/upload/iblock/c62/eo29ho1bc6qs5t1nel8te8yn5pfxzi14.jpg"
+        ]
+      }
+    ],
+    "meta": {
+      "page": 1,
+      "pageSize": 2,
+      "total": 37
+    }
+  },
+  "errors": []
+}

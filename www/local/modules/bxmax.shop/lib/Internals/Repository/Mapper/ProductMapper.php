@@ -3,8 +3,7 @@
 namespace Bxmax\Shop\Internals\Repository\Mapper;
 
 /**
- * Строка из инфоблока → товар в форме контракта API. Единственное место, где поля базы
- * превращаются в поля ответа.
+ * Товар, карточка и предложение в форме контракта API.
  */
 final class ProductMapper
 {
@@ -24,13 +23,14 @@ final class ProductMapper
 
     public static function convertOfferFromRow(array $row): array
     {
+        $price = self::convertPrice($row['PRICE_AMOUNT'], $row['PRICE_CURRENCY']);
         return [
             'id' => (int)$row['ID'],
             'name' => (string)$row['NAME'],
             'size' => $row['CLOTHES_SIZE'] ?? $row['SHOE_SIZE'],
             'color' => $row['COLOR_NAME'],
-            'price' => self::convertPrice($row['PRICE_AMOUNT'], $row['PRICE_CURRENCY']),
-            'available' => $row['IS_AVAILABLE'] === 'Y',
+            'price' => $price,
+            'available' => $row['IS_AVAILABLE'] === 'Y' && $price !== null,
         ];
     }
 

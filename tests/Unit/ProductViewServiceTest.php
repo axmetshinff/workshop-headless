@@ -16,3 +16,14 @@ test('на неизвестный id отвечает кодом PRODUCT_NOT_FOU
     expect($result->isSuccess())->toBeFalse()
         ->and($result->getErrors()[0]->getCode())->toBe('PRODUCT_NOT_FOUND');
 });
+
+test('карточка без предложений и фото совпадает с эталоном пустых коллекций', function () {
+    $product = ['id' => 1, 'name' => 'Футболка', 'code' => 't-shirt', 'price' => null];
+    $service = new ProductViewService(new InMemoryProductRepository([$product]));
+    $data = $service->getById(1, ['offers', 'images'])->getData();
+    $reference = json_decode(file_get_contents(dirname(__DIR__, 2) . '/contract/product-empty-relations.json'), true, flags: JSON_THROW_ON_ERROR);
+
+    expect($data)->toEqual($reference['data'])
+        ->and($data['offers'])->toBe([])
+        ->and($data['images'])->toBe([]);
+});

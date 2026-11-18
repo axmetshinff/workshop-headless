@@ -95,3 +95,14 @@ test('предложение содержит ID для корзины и под
         'price' => ['amount' => '1299.00', 'currency' => 'RUB'], 'available' => true,
     ]);
 });
+
+test('предложение доступно при наличии базовой цены и флаге каталога Y', function ($flag, $amount, $expected) {
+    $offer = ProductMapper::convertOfferFromRow([
+        'ID' => '75', 'NAME' => 'Брюки', 'CLOTHES_SIZE' => null, 'SHOE_SIZE' => null,
+        'COLOR_NAME' => null, 'PRICE_AMOUNT' => $amount, 'PRICE_CURRENCY' => 'RUB', 'IS_AVAILABLE' => $flag,
+    ]);
+
+    expect($offer['available'])->toBe($expected)
+        ->and($offer['size'])->toBeNull()
+        ->and($offer['color'])->toBeNull();
+})->with([['Y', null, false], ['N', '199', false], ['Y', '0', true]]);
