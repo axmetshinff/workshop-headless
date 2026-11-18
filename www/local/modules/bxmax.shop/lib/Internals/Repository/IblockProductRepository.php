@@ -20,7 +20,7 @@ final class IblockProductRepository implements ProductRepositoryInterface
         private readonly ProductImageRepository $images = new ProductImageRepository(),
     ) {}
 
-    public function findActive(int $limit, int $offset, array $include = []): array
+    public function findActive(int $limit, int $offset, array $include = [], array $orderBy = []): array
     {
         $rows = ElementClothesTable::getList([
             'select' => [
@@ -31,7 +31,7 @@ final class IblockProductRepository implements ProductRepositoryInterface
                 'PRICE_CURRENCY' => 'BASE_PRICE.CURRENCY',
             ],
             'filter' => ['=ACTIVE' => 'Y'],
-            'order' => ['SORT' => 'ASC', 'ID' => 'ASC'],
+            'order' => $orderBy ?: ['SORT' => 'ASC', 'ID' => 'ASC'],
             'limit' => $limit,
             'offset' => $offset,
             'runtime' => [$this->getBasePriceReference()],

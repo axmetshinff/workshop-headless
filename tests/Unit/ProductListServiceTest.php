@@ -36,3 +36,16 @@ test('список добавляет только запрошенные свя
     expect($service->getPage(1, 2)->getData()['items'][0])->not->toHaveKey('offers')
         ->and(array_column($service->getPage(1, 2, ['offers'])->getData()['items'], 'offers'))->toBe([[$offer], []]);
 });
+
+test('за последней страницей возвращает пустой список и запрошенный номер', function () {
+    $page = (new ProductListService(catalogOf(4)))->getPage(PHP_INT_MAX, 50)->getData();
+    expect($page)->toBe(['items' => [], 'meta' => ['page' => PHP_INT_MAX, 'pageSize' => 50, 'total' => 4]]);
+});
+
+test('сортирует до разбиения на страницы и сохраняет порядок ID при равном названии', function () {
+    $rows = [['name' => 'А'] + product(3), ['name' => 'Б'] + product(7), ['name' => 'Б'] + product(2)];
+    $service = new ProductListService(new InMemoryProductRepository($rows));
+    $order = ['NAME' => 'DESC', 'ID' => 'ASC'];
+    expect(array_column($service->getPage(1, 2, [], $order)->getData()['items'], 'id'))->toBe([2, 7])
+        ->and(array_column($service->getPage(2, 2, [], $order)->getData()['items'], 'id'))->toBe([3]);
+});

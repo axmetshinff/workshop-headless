@@ -8,6 +8,8 @@ namespace Bxmax\Shop\Public\Enum;
  */
 enum ErrorCode: string
 {
+    case InvalidSort = 'INVALID_SORT';
+    case InvalidOrder = 'INVALID_ORDER';
     case InvalidInclude = 'INVALID_INCLUDE';
     case ProductNotFound = 'PRODUCT_NOT_FOUND';
     case ProductNotAvailable = 'PRODUCT_NOT_AVAILABLE';
@@ -20,7 +22,7 @@ enum ErrorCode: string
     public function httpStatus(): int
     {
         return match ($this) {
-            self::InvalidInclude => 400,
+            self::InvalidInclude, self::InvalidSort, self::InvalidOrder => 400,
             self::ProductNotFound => 404,
             self::ProductNotAvailable => 422,
             self::BasketItemNotFound => 404,

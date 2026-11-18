@@ -4,6 +4,7 @@ namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
 use Bxmax\Shop\Public\Query\IncludeQuery;
+use Bxmax\Shop\Public\Query\ProductSort;
 use Bxmax\Shop\Public\Service\ProductListService;
 use Bxmax\Shop\Public\Service\ProductViewService;
 
@@ -24,7 +25,13 @@ final class Product extends ApiController
             return $this->respond($include);
         }
 
-        return $this->respond($productListService->getPage($page, $pageSize, $include->getData()));
+        $request = $this->getRequest();
+        $sort = ProductSort::parse($request->getQuery('sort'), $request->getQuery('order'));
+        if (!$sort->isSuccess()) {
+            return $this->respond($sort);
+        }
+
+        return $this->respond($productListService->getPage($page, $pageSize, $include->getData(), $sort->getData()));
     }
 
     public function getAction(ProductViewService $productViewService, int $id): ?array

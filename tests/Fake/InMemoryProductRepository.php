@@ -17,10 +17,24 @@ final class InMemoryProductRepository implements ProductRepositoryInterface
         private readonly array $relations = [],
     ) {}
 
-    public function findActive(int $limit, int $offset, array $include = []): array
+    public function findActive(int $limit, int $offset, array $include = [], array $orderBy = []): array
     {
+        $products = $this->products;
+        if ($orderBy) {
+            usort($products, static function (array $left, array $right) use ($orderBy): int {
+                foreach ($orderBy as $name => $direction) {
+                    $key = strtolower($name);
+                    $comparison = $left[$key] <=> $right[$key];
+                    if ($comparison !== 0) {
+                        return $direction === 'DESC' ? -$comparison : $comparison;
+                    }
+                }
+                return 0;
+            });
+        }
+
         return array_map(fn (array $product) => $this->withRelations($product, $include),
-            array_slice($this->products, $offset, $limit));
+            array_slice($products, $offset, $limit));
     }
 
     public function countActive(): int
@@ -38,6 +52,7 @@ final class InMemoryProductRepository implements ProductRepositoryInterface
 
         return null;
     }
+
     private function withRelations(array $product, array $include): array
     {
         foreach ($include as $name) {

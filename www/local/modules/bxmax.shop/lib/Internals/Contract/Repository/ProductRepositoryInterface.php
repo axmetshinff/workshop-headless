@@ -12,7 +12,7 @@ interface ProductRepositoryInterface
      *     price: ?array{amount: string, currency: string},
      * }>
      */
-    public function findActive(int $limit, int $offset, array $include = []): array;
+    public function findActive(int $limit, int $offset, array $include = [], array $orderBy = []): array;
 
     public function countActive(): int;
 
