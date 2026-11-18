@@ -19,7 +19,7 @@ final class Product extends ApiController
 
     public function listAction(ProductListService $productListService, int $page = 1, int $pageSize = 20): ?array
     {
-        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers']);
+        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers', 'images']);
         if (!$include->isSuccess()) {
             return $this->respond($include);
         }
@@ -29,7 +29,7 @@ final class Product extends ApiController
 
     public function getAction(ProductViewService $productViewService, int $id): ?array
     {
-        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers']);
+        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers', 'images']);
         if (!$include->isSuccess()) {
             return $this->respond($include);
         }

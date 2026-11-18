@@ -15,7 +15,10 @@ use Bxmax\Shop\Internals\Repository\Mapper\ProductMapper;
  */
 final class IblockProductRepository implements ProductRepositoryInterface
 {
-    public function __construct(private readonly OfferRepository $offers = new OfferRepository()) {}
+    public function __construct(
+        private readonly OfferRepository $offers = new OfferRepository(),
+        private readonly ProductImageRepository $images = new ProductImageRepository(),
+    ) {}
 
     public function findActive(int $limit, int $offset, array $include = []): array
     {
@@ -70,10 +73,14 @@ final class IblockProductRepository implements ProductRepositoryInterface
 
     private function withRelations(array $products, array $include): array
     {
-        if (in_array('offers', $include, true)) {
-            $offers = $this->offers->findByProductIds(array_column($products, 'id'));
+        $ids = array_column($products, 'id');
+        foreach ($include as $name) {
+            $grouped = match ($name) {
+                'offers' => $this->offers->findByProductIds($ids),
+                'images' => $this->images->findByProductIds($ids),
+            };
             foreach ($products as $index => $product) {
-                $products[$index]['offers'] = $offers[$product['id']] ?? [];
+                $products[$index][$name] = $grouped[$product['id']] ?? [];
             }
         }
 
