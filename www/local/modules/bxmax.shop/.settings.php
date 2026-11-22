@@ -10,7 +10,10 @@ return [
     'services' => [
         'value' => [
             \Bxmax\Shop\Internals\Contract\Repository\ProductRepositoryInterface::class => [
-                'className' => \Bxmax\Shop\Internals\Repository\IblockProductRepository::class,
+                'className' => \Bxmax\Shop\Internals\Repository\ArrayProductRepository::class,
+            ],
+            \Bxmax\Shop\Internals\Contract\Repository\SectionRepositoryInterface::class => [
+                'className' => \Bxmax\Shop\Internals\Repository\IblockSectionRepository::class,
             ],
         ],
         'readonly' => true,
