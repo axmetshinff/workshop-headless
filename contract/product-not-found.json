@@ -1,0 +1,11 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "Товар не найден",
+      "code": "PRODUCT_NOT_FOUND",
+      "customData": null
+    }
+  ]
+}

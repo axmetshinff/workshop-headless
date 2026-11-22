@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "data": {
+    "id": 1,
+    "name": "Футболка",
+    "code": "t-shirt",
+    "price": null,
+    "categoryId": null,
+    "article": null,
+    "descriptionHtml": "",
+    "offers": [],
+    "images": []
+  },
+  "errors": []
+}

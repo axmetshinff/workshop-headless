@@ -1,0 +1,11 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "Недопустимое направление order",
+      "code": "INVALID_ORDER",
+      "customData": null
+    }
+  ]
+}

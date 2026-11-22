@@ -12,6 +12,9 @@ return [
             \Bxmax\Shop\Internals\Contract\Repository\ProductRepositoryInterface::class => [
                 'className' => \Bxmax\Shop\Internals\Repository\IblockProductRepository::class,
             ],
+            \Bxmax\Shop\Internals\Contract\Repository\BasketRepositoryInterface::class => [
+                'className' => \Bxmax\Shop\Internals\Repository\SaleBasketRepository::class,
+            ],
         ],
         'readonly' => true,
     ],
