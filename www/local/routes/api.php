@@ -5,12 +5,14 @@ use Bitrix\Main\Routing\RoutingConfigurator;
 use Bxmax\Shop\Infrastructure\Controller\Basket as BasketController;
 use Bxmax\Shop\Infrastructure\Controller\Health;
 use Bxmax\Shop\Infrastructure\Controller\Product;
+use Bxmax\Shop\Infrastructure\Controller\Section;
 
 return static function (RoutingConfigurator $routes): void {
     $routes->prefix('api/v1')->group(static function (RoutingConfigurator $routes): void {
         $routes->get('health', [Health::class, 'check']);
         $routes->get('products', [Product::class, 'list']);
         $routes->get('products/{id}', [Product::class, 'get'])->where('id', '[0-9]+');
+        $routes->get('sections', [Section::class, 'list']);
         $routes->get('basket', [BasketController::class, 'get']);
         $routes->post('basket/items', [BasketController::class, 'add']);
         $routes->patch('basket/items/{id}', [BasketController::class, 'update'])->where('id', '[0-9]+');
