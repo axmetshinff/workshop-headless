@@ -1,0 +1,11 @@
+{
+  "status": "error",
+  "data": null,
+  "errors": [
+    {
+      "message": "Позиция корзины не найдена",
+      "code": "BASKET_ITEM_NOT_FOUND",
+      "customData": null
+    }
+  ]
+}

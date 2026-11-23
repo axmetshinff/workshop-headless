@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "data": {
+    "id": 9,
+    "name": "Штаны Цветочная Поляна",
+    "code": "pants-flower-glade",
+    "price": {
+      "amount": "2199.00",
+      "currency": "RUB"
+    },
+    "categoryId": 8,
+    "article": "177-79-хх",
+    "descriptionHtml": "Великолепные брюки фасона широкий клеш помогут создать стильный костюм. Модель удобно застегиваются на молнию сбоку. Такие брюки позволят обратить на Вас внимание окружающих и придать Вашему виду экстравагантность.\n\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<br />\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div><b>Дополнительное описание:</b></div>\n\n\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<ul>\n\t\t\t\t\t\t\t<li><b>Форма брючин:</b> Широкий клеш</li>\n\n\t\t\t\t\t\t\t<li><b>Вид застежки:</b><span class=\"Apple-tab-span\" style=\"white-space: pre;\">\t</span>Молния</li>\n\n\t\t\t\t\t\t\t<li><b>По назначению:</b> Повседневные</li>\n\n\t\t\t\t\t\t\t<li><b>Габариты предметов:</b> Длина, 103.5 см</li>\n\n\t\t\t\t\t\t\t<li><b>Брюки:</b> Ширина брючин, 48.0 см</li>\n\n\t\t\t\t\t\t\t<li><b>Брюки:</b> Высота посадки, 24.0 см</li>\n\n\t\t\t\t\t\t\t<li><b>Брюки:</b> Длина по внутреннему шву, 82.0 см</li>\n\n\t\t\t\t\t\t\t<li><b>Сезон:</b> лето</li>\n\n\t\t\t\t\t\t\t<li><b>Пол: </b>Женский</li>\n\n\t\t\t\t\t\t\t<li><b>Стиль:</b> Деловой стиль</li>\n\n\t\t\t\t\t\t\t<li><b>Страна бренда:</b> Россия</li>\n\n\t\t\t\t\t\t\t<li><b>Страна производитель:</b> Россия</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>"
+  },
+  "errors": []
+}

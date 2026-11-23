@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Bxmax\Shop\Public\Enum;
+
+/**
+ * Коды ошибок API. Значение кода — часть контракта: по нему фронт выбирает экран.
+ * Каталог кодов с описанием — contract/errors.md.
+ */
+enum ErrorCode: string
+{
+    case InvalidSort = 'INVALID_SORT';
+    case InvalidOrder = 'INVALID_ORDER';
+    case InvalidInclude = 'INVALID_INCLUDE';
+    case ProductNotFound = 'PRODUCT_NOT_FOUND';
+    case ProductNotAvailable = 'PRODUCT_NOT_AVAILABLE';
+    case BasketItemNotFound = 'BASKET_ITEM_NOT_FOUND';
+    case BasketSaveFailed = 'BASKET_SAVE_FAILED';
+
+    /**
+     * HTTP-статус ответа с этой ошибкой. Сервисы его не читают, статус ставит контроллер.
+     */
+    public function httpStatus(): int
+    {
+        return match ($this) {
+            self::InvalidInclude, self::InvalidSort, self::InvalidOrder => 400,
+            self::ProductNotFound => 404,
+            self::ProductNotAvailable => 422,
+            self::BasketItemNotFound => 404,
+            self::BasketSaveFailed => 500,
+        };
+    }
+}

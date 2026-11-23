@@ -3,28 +3,28 @@
   "data": {
     "items": [
       {
-        "id": 1,
-        "name": "Футболка",
-        "code": "t-shirt",
-        "price": {"amount": "1990.00", "currency": "RUB"}
+        "id": 9,
+        "name": "Штаны Цветочная Поляна",
+        "code": "pants-flower-glade",
+        "price": {
+          "amount": "2199.00",
+          "currency": "RUB"
+        }
       },
       {
-        "id": 2,
-        "name": "Худи",
-        "code": "hoodie",
-        "price": {"amount": "4990.00", "currency": "RUB"}
-      },
-      {
-        "id": 3,
-        "name": "Кепка",
-        "code": "cap",
-        "price": {"amount": "1290.00", "currency": "RUB"}
+        "id": 38,
+        "name": "Туфли Ультра Лайн",
+        "code": "shoes-ultra-line",
+        "price": {
+          "amount": "2799.00",
+          "currency": "RUB"
+        }
       }
     ],
     "meta": {
       "page": 1,
-      "pageSize": 20,
-      "total": 3
+      "pageSize": 2,
+      "total": 38
     }
   },
   "errors": []

@@ -3,30 +3,55 @@
 namespace Bxmax\Shop\Infrastructure\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
-use Bitrix\Main\Engine\Controller;
+use Bxmax\Shop\Public\Query\IncludeQuery;
+use Bxmax\Shop\Public\Query\ProductSort;
 use Bxmax\Shop\Public\Service\ProductListService;
+use Bxmax\Shop\Public\Service\ProductViewService;
 
-final class Product extends Controller
+final class Product extends ApiController
 {
-    protected function getDefaultPreFilters(): array
-    {
-        return [];
-    }
-
     public function configureActions(): array
     {
         return [
-            'list' => [
-                'prefilters' => [
-                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET]),
-                    new ActionFilter\CloseSession(),
-                ],
-            ],
+            'list' => ['prefilters' => $this->getPublicReadFilters()],
+            'get' => ['prefilters' => $this->getPublicReadFilters()],
         ];
     }
 
-    public function listAction(ProductListService $productListService, int $page = 1, int $pageSize = 20): array
+    public function listAction(ProductListService $productListService, int $page = 1, int $pageSize = 20): ?array
     {
-        return $productListService->getPage($page, $pageSize)->getData();
+        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers', 'images']);
+        if (!$include->isSuccess()) {
+            return $this->respond($include);
+        }
+
+        $request = $this->getRequest();
+        $sort = ProductSort::parse($request->getQuery('sort'), $request->getQuery('order'));
+        if (!$sort->isSuccess()) {
+            return $this->respond($sort);
+        }
+
+        return $this->respond($productListService->getPage($page, $pageSize, $include->getData(), $sort->getData()));
+    }
+
+    public function getAction(ProductViewService $productViewService, int $id): ?array
+    {
+        $include = IncludeQuery::parse($this->getRequest()->getQuery('include'), ['offers', 'images']);
+        if (!$include->isSuccess()) {
+            return $this->respond($include);
+        }
+
+        return $this->respond($productViewService->getById($id, $include->getData()));
+    }
+
+    /**
+     * Чтение для всех: только GET, без авторизации, сессия закрывается до действия.
+     */
+    private function getPublicReadFilters(): array
+    {
+        return [
+            new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET]),
+            new ActionFilter\CloseSession(),
+        ];
     }
 }
